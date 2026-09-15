@@ -29,3 +29,24 @@ def transform_weather(data):
 
     return pd.concat(rows, ignore_index=True)
 
+
+def standardize_types(df):
+    df["date"] = pd.to_datetime(df["date"], errors="coerce")
+
+    numeric_columns = [
+        "latitude",
+        "longitude",
+        "elevation",
+        "temperature_max",
+        "temperature_min",
+        "precipitation",
+        "rain_probability",
+        "wind_speed_max",
+        "wind_gust_max",
+        "weather_code"
+    ]
+
+    for column in numeric_columns: df[column] = pd.to_numeric(df[column], errors="coerce")
+
+    return df
+
