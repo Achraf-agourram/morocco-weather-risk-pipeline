@@ -20,6 +20,7 @@ def add_temperature_category(df):
     return df
 
 def add_precipitation_category(df):
+    
     df["precipitation_category"] = pd.cut(
         df["precipitation"],
         bins=[-float("inf"), 0, 2.5, 10, float("inf")],
@@ -30,4 +31,14 @@ def add_precipitation_category(df):
 
     return df
 
+def add_wind_category(df):
 
+    df["wind_category"] = pd.cut(
+        df["wind_speed_max"],
+        bins=[-float("inf"), 20, 40, 60, float("inf")],
+        labels=["low", "moderate", "strong", "very_strong"],
+        right=False,
+        include_lowest=True
+    )
+
+    return df
