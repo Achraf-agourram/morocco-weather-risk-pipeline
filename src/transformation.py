@@ -25,6 +25,16 @@ def transform_weather(data):
         df["timezone"] = city["timezone"]
         df["elevation"] = city["elevation"]
 
+        df = df.rename(columns={
+            "time": "date",
+            "temperature_2m_max": "temperature_max",
+            "temperature_2m_min": "temperature_min",
+            "precipitation_sum": "precipitation",
+            "precipitation_probability_max": "rain_probability",
+            "wind_speed_10m_max": "wind_speed_max",
+            "wind_gusts_10m_max": "wind_gust_max"
+        })
+
         rows.append(df)
 
     return pd.concat(rows, ignore_index=True)
@@ -66,3 +76,4 @@ def remove_duplicates(df):
             "date"
         ]
     )
+
