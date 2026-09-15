@@ -2,15 +2,14 @@ import pandas as pd
 import numpy as np
 import json, os
 
-BRONZE_WEATHER = "src/bronze/weather.json"
-BRONZE_CITIES = "src/bronze/cities.csv"
-SILVER_FILE = "src/silver/clean_weather.csv"
+BRONZE_WEATHER = "data/bronze/weather.json"
+BRONZE_CITIES = "data/bronze/cities.csv"
+SILVER_FILE = "data/silver/clean_weather.csv"
 
 
 def load_weather(file):
     with open(file, "r", encoding="utf-8") as file:
         return json.load(file)
-
 
 def transform_weather(data):
     rows = []
@@ -39,7 +38,6 @@ def transform_weather(data):
 
     return pd.concat(rows, ignore_index=True)
 
-
 def standardize_types(df):
     df["date"] = pd.to_datetime(df["date"], errors="coerce")
 
@@ -60,13 +58,11 @@ def standardize_types(df):
 
     return df
 
-
 def handle_missing_values(df):
     df = df.dropna(subset=["date"])
     df = df.dropna(subset=["latitude", "longitude"])
 
     return df
-
 
 def remove_duplicates(df):
     return df.drop_duplicates(
@@ -76,20 +72,6 @@ def remove_duplicates(df):
             "date"
         ]
     )
-
-def quality_checks(df):
-    results = {
-        "valid_dates": df["date"].notna().all(),
-        "valid_latitudes": df["latitude"].notna().all(),
-        "valid_longitudes": df["longitude"].notna().all(),
-        "valid_temperatures": (df["temperature_min"] <= df["temperature_max"]).all(),
-        "valid_precipitation": (df["precipitation"] >= 0).all(),
-        "valid_rain_probability": ((df["rain_probability"] >= 0) & (df["rain_probability"] <= 100)).all(),
-        "valid_wind_speed": (df["wind_speed_max"] >= 0).all()
-    }
-
-    return results
-
 
 def join_cities(file, df):
     if not os.path.exists(file):
