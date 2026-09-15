@@ -90,3 +90,40 @@ def quality_checks(df):
 
     return results
 
+
+def join_cities(file, df):
+    if not os.path.exists(file):
+        return df
+
+    cities = pd.read_csv(file)
+
+    df["latitude_join"] = df["latitude"].round(4)
+    df["longitude_join"] = df["longitude"].round(4)
+
+    cities["latitude_join"] = cities["lat"].round(4)
+    cities["longitude_join"] = cities["lng"].round(4)
+
+    df = pd.merge(
+        df,
+        cities[
+            [
+                "city",
+                "latitude_join",
+                "longitude_join"
+            ]
+        ],
+        on=[
+            "latitude_join",
+            "longitude_join"
+        ]
+    )
+
+    return df.drop(
+        columns=[
+            "latitude_join",
+            "longitude_join"
+        ]
+    )
+
+def save_silver_data(file, df):
+    df.to_csv(file, index=False, encoding="utf-8")
