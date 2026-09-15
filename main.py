@@ -5,6 +5,5 @@ from src.transformation.features import *
 from src.loading import *
 
 
-# save_silver_data(SILVER_FILE, join_cities(BRONZE_CITIES, remove_duplicates(handle_missing_values(standardize_types(transform_weather(load_weather(BRONZE_WEATHER)))))))
 
-print(add_temperature_category(load_silver_data(SILVER_FILE)))
+print(add_wind_category(add_precipitation_category(add_temperature_category(load_silver_data(SILVER_FILE)))))

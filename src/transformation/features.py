@@ -18,3 +18,16 @@ def add_temperature_category(df):
     )
 
     return df
+
+def add_precipitation_category(df):
+    df["precipitation_category"] = pd.cut(
+        df["precipitation"],
+        bins=[-float("inf"), 0, 2.5, 10, float("inf")],
+        labels=["none", "light", "moderate", "heavy"],
+        right=False,
+        include_lowest=True
+    )
+
+    return df
+
+
