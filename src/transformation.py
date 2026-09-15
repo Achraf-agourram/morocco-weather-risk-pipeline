@@ -50,3 +50,19 @@ def standardize_types(df):
 
     return df
 
+
+def handle_missing_values(df):
+    df = df.dropna(subset=["date"])
+    df = df.dropna(subset=["latitude", "longitude"])
+
+    return df
+
+
+def remove_duplicates(df):
+    return df.drop_duplicates(
+        subset=[
+            "latitude",
+            "longitude",
+            "date"
+        ]
+    )
