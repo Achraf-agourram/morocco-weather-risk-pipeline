@@ -42,3 +42,13 @@ def add_wind_category(df):
     )
 
     return df
+
+def add_date_features(df):
+    df["date"] = pd.to_datetime(df["date"])
+
+    df["year"] = df["date"].dt.year
+    df["month"] = df["date"].dt.month
+    df["day"] = df["date"].dt.day
+    df["day_of_week"] = df["date"].dt.day_name()
+
+    return df
