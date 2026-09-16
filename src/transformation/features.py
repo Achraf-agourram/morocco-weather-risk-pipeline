@@ -52,3 +52,51 @@ def add_date_features(df):
     df["day_of_week"] = df["date"].dt.day_name()
 
     return df
+
+def calculate_rain_risk(precipitation):
+    if precipitation == 0:
+        return 0
+
+    if precipitation < 2.5:
+        return 25
+
+    if precipitation < 10:
+        return 60
+
+    return 100
+
+def calculate_wind_risk(wind_speed):
+    if wind_speed < 20:
+        return 0
+
+    if wind_speed < 40:
+        return 30
+
+    if wind_speed < 60:
+        return 70
+
+    return 100
+
+def calculate_temperature_risk(temperature):
+    if 15 <= temperature <= 25:
+        return 0
+
+    if 10 <= temperature < 15 or 25 < temperature <= 30:
+        return 25
+
+    if 5 <= temperature < 10 or 30 < temperature <= 35:
+        return 60
+
+    return 100
+
+def calculate_rain_probability_risk(probability):
+    if probability < 20:
+        return 0
+
+    if probability < 50:
+        return 30
+
+    if probability < 80:
+        return 60
+
+    return 100
