@@ -7,5 +7,3 @@ from src.analytics.analytics import *
 
 
 db = connect_database(HOST, PORT, DATABASE, USER, PASSWORD)
-
-print(get_highest_temperatures(db))
