@@ -1,5 +1,4 @@
 import pandas as pd
-import psycopg2
 
 
 def get_highest_temperatures(connection):
