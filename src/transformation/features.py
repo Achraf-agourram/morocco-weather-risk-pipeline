@@ -1,5 +1,4 @@
 import pandas as pd
-import os
 
 SILVER_FILE = "data/silver/clean_weather.csv"
 GOLD_FILE = "data/gold/weather_features.csv"
