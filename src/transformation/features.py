@@ -100,3 +100,21 @@ def calculate_rain_probability_risk(probability):
         return 60
 
     return 100
+
+def add_risk_score(df):
+    
+    df["rain_risk"] = df["precipitation"].apply(calculate_rain_risk)
+    df["wind_risk"] = df["wind_speed_max"].apply(calculate_wind_risk)
+    df["temperature_risk"] = df["temperature_max"].apply(calculate_temperature_risk)
+    df["rain_probability_risk"] = df["rain_probability"].apply(calculate_rain_probability_risk)
+
+    df["weather_risk_score"] = (
+        df["rain_risk"] * 0.35
+        + df["wind_risk"] * 0.35
+        + df["temperature_risk"] * 0.15
+        + df["rain_probability_risk"] * 0.15
+    )
+
+    df["weather_risk_score"] = df["weather_risk_score"].round(2)
+
+    return df
