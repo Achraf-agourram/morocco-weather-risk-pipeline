@@ -1,7 +1,6 @@
 import pandas as pd
 import psycopg2
 
-
 GOLD_FILE = "data/gold/weather_features.csv"
 HOST = "localhost"
 PORT = "5432"
@@ -123,3 +122,17 @@ def upsert_weather_risk(db, forecast_id, row):
 
     return db.fetchone()[0]
 
+def store_data(df, connection):
+
+    db = connection.cursor()
+
+    for i, row in df.iterrows():
+
+        city_id = get_or_create_city(db, row["city"], row["latitude"], row["longitude"])
+        forecast_id = upsert_forecast(db, city_id, row)
+        risk_id = upsert_weather_risk(db, forecast_id, row)
+
+    connection.commit()
+    connection.close()
+
+    return True
