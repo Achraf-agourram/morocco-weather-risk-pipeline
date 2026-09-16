@@ -1,5 +1,5 @@
 import pandas as pd
-
+import os
 
 SILVER_FILE = "data/silver/clean_weather.csv"
 GOLD_FILE = "data/gold/weather_features.csv"
@@ -102,7 +102,7 @@ def calculate_rain_probability_risk(probability):
     return 100
 
 def add_risk_score(df):
-    
+
     df["rain_risk"] = df["precipitation"].apply(calculate_rain_risk)
     df["wind_risk"] = df["wind_speed_max"].apply(calculate_wind_risk)
     df["temperature_risk"] = df["temperature_max"].apply(calculate_temperature_risk)
@@ -118,3 +118,17 @@ def add_risk_score(df):
     df["weather_risk_score"] = df["weather_risk_score"].round(2)
 
     return df
+
+def add_risk_category(df):
+    df["risk_category"] = pd.cut(
+        df["weather_risk_score"],
+        bins=[-float("inf"), 25, 50, 75, float("inf")],
+        labels=["low", "moderate", "high", "very_high"],
+        include_lowest=True,
+        right=False
+    )
+
+    return df
+
+def save_gold_data(file, df):
+    df.to_csv(file, index=False)
