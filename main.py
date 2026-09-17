@@ -64,4 +64,16 @@ def app():
     number_of_risk_periods = filtered_df[filtered_df["weather_risk_score"] >= 50].shape[0]
     highest_risk_city = (filtered_df.loc[filtered_df["weather_risk_score"].idxmax(), "city_name"])
 
+    col1, col2, col3, col4, col5 = st.columns(5)
+
+    col1.metric("Nombre de villes", number_of_cities)
+    col2.metric("Température maximale", f"{max_temperature:.1f} °C")
+    col3.metric("Précipitations maximales", f"{max_precipitation:.1f} mm")
+    col4.metric("Périodes à risque", number_of_risk_periods)
+    col5.metric("Ville au risque le plus élevé", highest_risk_city)
+
+    st.subheader("Évolution du risque")
+
+    risk_chart = filtered_df[["forecast_date", "weather_risk_score"]].set_index("forecast_date")
+
 app()
