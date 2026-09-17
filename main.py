@@ -73,7 +73,28 @@ def app():
     col5.metric("Ville au risque le plus élevé", highest_risk_city)
 
     st.subheader("Évolution du risque")
-
     risk_chart = filtered_df[["forecast_date", "weather_risk_score"]].set_index("forecast_date")
+    st.line_chart(risk_chart)
+
+    st.subheader("Températures")
+    temperature_chart = filtered_df[["forecast_date", "temperature_max", "temperature_min"]].set_index("forecast_date")
+    st.line_chart(temperature_chart)
+
+    st.subheader("Précipitations")
+    precipitation_chart = filtered_df[["forecast_date", "precipitation"]].set_index("forecast_date")
+    st.bar_chart(precipitation_chart)
+
+    st.subheader("Périodes nécessitant une vigilance particulière")
+    risk_df = filtered_df[filtered_df["weather_risk_score"] >= 50][[
+            "city_name",
+            "forecast_date",
+            "temperature_max",
+            "precipitation",
+            "wind_speed_max",
+            "weather_risk_score",
+            "risk_category"
+        ]].sort_values("weather_risk_score", ascending=False)
+
+    st.dataframe(risk_df, use_container_width=True)
 
 app()
