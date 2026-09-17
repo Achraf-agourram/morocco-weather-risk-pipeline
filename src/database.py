@@ -1,4 +1,4 @@
-import psycopg2, os
+import psycopg2, os, streamlit
 import pandas as pd
 from dotenv import load_dotenv
 
@@ -13,7 +13,8 @@ PASSWORD = os.getenv("PASSWORD")
 def connect_database(host, port, database, user, password):
     return psycopg2.connect(host=host, port=port, database=database, user=user, password=password)
 
-def load_data(connection):
+@streamlit.cache_data(ttl=3600)
+def load_data(_connection):
     query = """
         SELECT
             c.city_name,
@@ -36,4 +37,4 @@ def load_data(connection):
         ORDER BY wf.forecast_date;
     """
 
-    return pd.read_sql_query(query, connection)
+    return pd.read_sql_query(query, _connection)

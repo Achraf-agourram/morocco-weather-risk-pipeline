@@ -68,7 +68,6 @@ def app():
     if len(selected_dates) == 2:
         start_date = pd.Timestamp(selected_dates[0])
         end_date = pd.Timestamp(selected_dates[1])
-
         filtered_df = filtered_df[(filtered_df["forecast_date"] >= start_date) & (filtered_df["forecast_date"] <= end_date)]
 
     if selected_risk != "Tous":
@@ -97,11 +96,7 @@ def app():
             pickable=True
         )
 
-        map_view = pdk.ViewState(
-            latitude=31.8,
-            longitude=-7.1,
-            zoom=5.2
-        )
+        map_view = pdk.ViewState(latitude=31.8, longitude=-7.1, zoom=5.2)
 
         map_deck = pdk.Deck(
             layers=[map_layer],
@@ -115,14 +110,10 @@ def app():
                     Température: {temperature_max} °C<br/>
                     Précipitations: {precipitation} mm
                 """
-            },
-            map_style=None
+            }
         )
 
-        st.pydeck_chart(
-            map_deck,
-            use_container_width=True
-        )
+        st.pydeck_chart(map_deck, width="stretch")
 
     with col_legend:
         st.markdown("### Légende")
