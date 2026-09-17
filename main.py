@@ -6,8 +6,27 @@ from src.loading import *
 from src.analytics.analytics import *
 from src.database import *
 import streamlit as st
+import pydeck as pdk
 
+def add_risk_color(df):
+    def get_color(score):
+        if score >= 80:
+            return [230, 50, 50]
 
+        if score >= 60:
+            return [240, 130, 40]
+
+        if score >= 40:
+            return [240, 190, 50]
+
+        if score >= 20:
+            return [60, 180, 120]
+
+        return [150, 210, 220]
+
+    df["risk_color"] = df["weather_risk_score"].apply(get_color)
+
+    return df
 
 def app():
     st.title("Weather & Risk Dashboard")
@@ -57,6 +76,67 @@ def app():
     if filtered_df.empty:
         st.warning("Aucune donnée ne correspond aux filtres sélectionnés.")
         return
+
+
+    filtered_df = add_risk_color(filtered_df)
+
+    col_map, col_legend = st.columns([4, 1])
+
+    with col_map:
+        st.subheader("Carte des risques météorologiques")
+
+        filtered_df = add_risk_color(filtered_df)
+
+        map_layer = pdk.Layer(
+            "ScatterplotLayer",
+            data=filtered_df,
+            get_position="[longitude, latitude]",
+            get_fill_color="risk_color",
+            get_radius=7000,
+            pickable=True
+        )
+
+        map_view = pdk.ViewState(
+            latitude=31.8,
+            longitude=-7.1,
+            zoom=5.2
+        )
+
+        map_deck = pdk.Deck(
+            layers=[map_layer],
+            initial_view_state=map_view,
+            tooltip={
+                "html": """
+                    <b>{city_name}</b><br/>
+                    Date: {forecast_date}<br/>
+                    Risk: {weather_risk_score}/100<br/>
+                    Catégorie: {risk_category}<br/>
+                    Température: {temperature_max} °C<br/>
+                    Précipitations: {precipitation} mm
+                """
+            },
+            map_style=None
+        )
+
+        st.pydeck_chart(
+            map_deck,
+            use_container_width=True
+        )
+
+    with col_legend:
+        st.markdown("### Légende")
+        st.markdown("""
+        🔴 très élevé  80 - 100
+
+        🟠 élevé  60 - 79
+
+        🟡 moyen  40 - 59
+
+        🟢 faible  20 - 39
+
+        🔵 très faible  0 - 19
+        """)
+    
 
     number_of_cities = filtered_df["city_name"].nunique()
     max_temperature = filtered_df["temperature_max"].max()

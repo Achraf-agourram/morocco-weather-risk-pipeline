@@ -17,6 +17,8 @@ def load_data(connection):
     query = """
         SELECT
             c.city_name,
+            c.latitude,
+            c.longitude,
             wf.forecast_date,
             wf.temperature_max,
             wf.temperature_min,
