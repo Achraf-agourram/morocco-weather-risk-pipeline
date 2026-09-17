@@ -1,10 +1,13 @@
 import pandas as pd
 import numpy as np
 import json, os
+from dotenv import load_dotenv
 
-BRONZE_WEATHER = "data/bronze/weather.json"
-BRONZE_CITIES = "data/bronze/cities.csv"
-SILVER_FILE = "data/silver/clean_weather.csv"
+load_dotenv()
+
+BRONZE_WEATHER = os.getenv("BRONZE_WEATHER")
+BRONZE_CITIES = os.getenv("BRONZE_CITIES")
+SILVER_FILE = os.getenv("SILVER_FILE")
 
 
 def load_weather(file):

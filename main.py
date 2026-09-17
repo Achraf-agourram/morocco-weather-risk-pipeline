@@ -13,12 +13,12 @@ def app():
     st.title("Weather & Risk Dashboard")
     st.write("Analyse des prévisions météorologiques et des niveaux de risque.")
 
-    connection = connect_database(HOST, PORT, DATABASE, USER, PASSWORD)
-
     try:
+        connection = connect_database(HOST, PORT, DATABASE, USER, PASSWORD)
         df = load_data(connection)
-    finally:
-        connection.close()
+    except psycopg2.OperationalError:
+        st.error("La connexion à la base de données a échoué, réessayer plus tard.")
+        return
 
     df["forecast_date"] = pd.to_datetime(df["forecast_date"])
 
@@ -96,5 +96,7 @@ def app():
         ]].sort_values("weather_risk_score", ascending=False)
 
     st.dataframe(risk_df, use_container_width=True)
+
+    connection.close()
 
 app()

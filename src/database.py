@@ -1,12 +1,14 @@
-import psycopg2
+import psycopg2, os
 import pandas as pd
+from dotenv import load_dotenv
 
-GOLD_FILE = "data/gold/weather_features.csv"
-HOST = "localhost"
-PORT = "5432"
-DATABASE = "weather_pipeline"
-USER = "postgres"
-PASSWORD = "admin"
+load_dotenv()
+
+HOST = os.getenv("HOST")
+PORT = os.getenv("PORT")
+DATABASE = os.getenv("DATABASE")
+USER = os.getenv("USER")
+PASSWORD = os.getenv("PASSWORD")
 
 def connect_database(host, port, database, user, password):
     return psycopg2.connect(host=host, port=port, database=database, user=user, password=password)

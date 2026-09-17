@@ -1,7 +1,11 @@
 import pandas as pd
+from dotenv import load_dotenv
+import os
 
-SILVER_FILE = "data/silver/clean_weather.csv"
-GOLD_FILE = "data/gold/weather_features.csv"
+load_dotenv()
+
+SILVER_FILE = os.getenv("SILVER_FILE")
+GOLD_FILE = os.getenv("GOLD_FILE")
 
 
 def load_silver_data(file):
