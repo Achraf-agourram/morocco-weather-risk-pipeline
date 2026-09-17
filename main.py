@@ -25,7 +25,6 @@ def app():
     st.sidebar.header("Filtres")
 
     cities = ["Toutes"] + sorted(df["city_name"].unique().tolist())
-
     selected_city = st.sidebar.selectbox("Ville", cities)
 
     min_date = df["forecast_date"].min().date()
@@ -39,9 +38,30 @@ def app():
     )
 
     risk_levels = ["Tous", "low", "moderate", "high", "very_high"]
-
     selected_risk = st.sidebar.selectbox("Niveau de risque", risk_levels)
 
     filtered_df = df.copy()
+
+    if selected_city != "Toutes": 
+        filtered_df = filtered_df[filtered_df["city_name"] == selected_city]
+
+    if len(selected_dates) == 2:
+        start_date = pd.Timestamp(selected_dates[0])
+        end_date = pd.Timestamp(selected_dates[1])
+
+        filtered_df = filtered_df[(filtered_df["forecast_date"] >= start_date) & (filtered_df["forecast_date"] <= end_date)]
+
+    if selected_risk != "Tous":
+        filtered_df = filtered_df[filtered_df["risk_category"] == selected_risk]
+
+    if filtered_df.empty:
+        st.warning("Aucune donnée ne correspond aux filtres sélectionnés.")
+        return
+
+    number_of_cities = filtered_df["city_name"].nunique()
+    max_temperature = filtered_df["temperature_max"].max()
+    max_precipitation = filtered_df["precipitation"].max()
+    number_of_risk_periods = filtered_df[filtered_df["weather_risk_score"] >= 50].shape[0]
+    highest_risk_city = (filtered_df.loc[filtered_df["weather_risk_score"].idxmax(), "city_name"])
 
 app()
