@@ -35,6 +35,7 @@ def app():
     try:
         connection = connect_database(HOST, PORT, DATABASE, USER, PASSWORD)
         df = load_data(connection)
+        connection.close()
     except psycopg2.OperationalError:
         st.error("La connexion à la base de données a échoué, réessayer plus tard.")
         return
@@ -164,19 +165,5 @@ def app():
     precipitation_chart = filtered_df[["forecast_date", "precipitation"]].set_index("forecast_date")
     st.bar_chart(precipitation_chart)
 
-    st.subheader("Périodes nécessitant une vigilance particulière")
-    risk_df = filtered_df[filtered_df["weather_risk_score"] >= 50][[
-            "city_name",
-            "forecast_date",
-            "temperature_max",
-            "precipitation",
-            "wind_speed_max",
-            "weather_risk_score",
-            "risk_category"
-        ]].sort_values("weather_risk_score", ascending=False)
-
-    st.dataframe(risk_df, use_container_width=True)
-
-    connection.close()
 
 app()
