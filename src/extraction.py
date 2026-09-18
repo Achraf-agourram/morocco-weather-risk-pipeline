@@ -48,5 +48,3 @@ def extract_weather (cities=None, url=WEATHER_URL, file=BRONZE_WEATHER):
         json.dump(data, file, indent=4)
 
     return True
-
-extract_weather()
