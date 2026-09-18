@@ -8,7 +8,7 @@ SILVER_FILE = os.getenv("SILVER_FILE")
 GOLD_FILE = os.getenv("GOLD_FILE")
 
 
-def load_silver_data(file):
+def load_silver_data(file=SILVER_FILE):
     return pd.read_csv(file)
 
 def add_temperature_category(df):
@@ -133,5 +133,8 @@ def add_risk_category(df):
 
     return df
 
-def save_gold_data(file, df):
+def save_gold_data(df, file=GOLD_FILE):
     df.to_csv(file, index=False)
+
+if __name__ == "__main__":
+    save_gold_data(add_risk_category(add_risk_score(add_date_features(add_wind_category(add_precipitation_category(add_temperature_category(load_silver_data())))))))
