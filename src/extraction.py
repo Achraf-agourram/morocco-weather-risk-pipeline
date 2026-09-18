@@ -20,11 +20,14 @@ def extract_cities (url=CITIES_URL, file=BRONZE_CITIES):
 
     return True
 
-def extract_weather (cities=pd.read_csv(BRONZE_CITIES), url=WEATHER_URL, file=BRONZE_WEATHER):
+def extract_weather (cities=None, url=WEATHER_URL, file=BRONZE_WEATHER):
+
+    if cities is None:
+        cities = pd.read_csv(BRONZE_CITIES)
 
     params = {
-        "latitude": ",".join(cities["latitude"].astype(str)),
-        "longitude": ",".join(cities["longitude"].astype(str)),
+        "latitude": ",".join(cities["lat"].astype(str)),
+        "longitude": ",".join(cities["lng"].astype(str)),
         "daily": [
             "temperature_2m_max",
             "temperature_2m_min",
@@ -45,3 +48,5 @@ def extract_weather (cities=pd.read_csv(BRONZE_CITIES), url=WEATHER_URL, file=BR
         json.dump(data, file, indent=4)
 
     return True
+
+extract_weather()
