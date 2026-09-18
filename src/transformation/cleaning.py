@@ -10,7 +10,7 @@ BRONZE_CITIES = os.getenv("BRONZE_CITIES")
 SILVER_FILE = os.getenv("SILVER_FILE")
 
 
-def load_weather(file):
+def load_weather(file=BRONZE_WEATHER):
     with open(file, "r", encoding="utf-8") as file:
         return json.load(file)
 
@@ -76,9 +76,7 @@ def remove_duplicates(df):
         ]
     )
 
-def join_cities(file, df):
-    if not os.path.exists(file):
-        return df
+def join_cities(df, file=BRONZE_CITIES):
 
     cities = pd.read_csv(file)
 
@@ -110,5 +108,9 @@ def join_cities(file, df):
         ]
     )
 
-def save_silver_data(file, df):
+def save_silver_data(df, file=SILVER_FILE):
     df.to_csv(file, index=False, encoding="utf-8")
+
+
+if __name__ == "__main__":
+    save_silver_data(join_cities(remove_duplicates(handle_missing_values(standardize_types(transform_weather(load_weather()))))))
