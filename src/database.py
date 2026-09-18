@@ -10,7 +10,7 @@ DATABASE = os.getenv("DATABASE")
 USER = os.getenv("USER")
 PASSWORD = os.getenv("PASSWORD")
 
-def connect_database(host, port, database, user, password):
+def connect_database(host=HOST, port=PORT, database=DATABASE, user=USER, password=PASSWORD):
     return psycopg2.connect(host=host, port=port, database=database, user=user, password=password)
 
 @streamlit.cache_data(ttl=3600)

@@ -1,7 +1,13 @@
 import pandas as pd
+from dotenv import load_dotenv
+import os
+from database import connect_database
+
+GOLD_FILE = os.getenv("GOLD_FILE")
 
 
-def load_gold_data(file):
+
+def load_gold_data(file=GOLD_FILE):
     return pd.read_csv(file)
 
 def get_or_create_city(db, city_name, latitude, longitude):
@@ -111,7 +117,7 @@ def upsert_weather_risk(db, forecast_id, row):
 
     return db.fetchone()[0]
 
-def store_data(df, connection):
+def store_data(df, connection=connect_database()):
 
     db = connection.cursor()
 
@@ -125,3 +131,6 @@ def store_data(df, connection):
     connection.close()
 
     return True
+
+if __name__ == "__main__":
+    store_data(load_gold_data())

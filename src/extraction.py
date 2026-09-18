@@ -1,3 +1,20 @@
+def extract_cities ():
+    return True
+
+def extract_weather ():
+    return True
+
+
+
+
+
+
+
+
+
+
+
+
 # url = "https://api.open-meteo.com/v1/forecast"
 
 # params = {
