@@ -2,6 +2,10 @@
 from src.database import *
 import streamlit as st
 import pydeck as pdk
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def add_risk_color(df):
     def get_color(score):
@@ -28,10 +32,10 @@ def app():
     st.write("Analyse des prévisions météorologiques et des niveaux de risque.")
 
     try:
-        connection = connect_database(HOST, PORT, DATABASE, USER, PASSWORD)
+        connection = connect_database(os.getenv("DB_HOST"), os.getenv("DB_PORT"), os.getenv("DB_NAME"), os.getenv("DB_USER"), os.getenv("DB_PASSWORD"))
         df = load_data(connection)
         connection.close()
-    except psycopg2.OperationalError:
+    except psycopg2.OperationalError as e:
         st.error("La connexion à la base de données a échoué, réessayer plus tard.")
         return
 
