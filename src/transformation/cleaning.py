@@ -22,6 +22,7 @@ def transform_weather(data):
 
         df = pd.DataFrame(daily)
 
+        df["city"] = city["city"]
         df["latitude"] = city["latitude"]
         df["longitude"] = city["longitude"]
         df["timezone"] = city["timezone"]
@@ -80,33 +81,7 @@ def join_cities(df, file=BRONZE_CITIES):
 
     cities = pd.read_csv(file)
 
-    df["latitude_join"] = df["latitude"].round(4)
-    df["longitude_join"] = df["longitude"].round(4)
-
-    cities["latitude_join"] = cities["lat"].round(4)
-    cities["longitude_join"] = cities["lng"].round(4)
-
-    df = pd.merge(
-        df,
-        cities[
-            [
-                "city",
-                "latitude_join",
-                "longitude_join"
-            ]
-        ],
-        on=[
-            "latitude_join",
-            "longitude_join"
-        ]
-    )
-
-    return df.drop(
-        columns=[
-            "latitude_join",
-            "longitude_join"
-        ]
-    )
+    return pd.merge(df, cities[["city"]], on="city", how="inner")
 
 def save_silver_data(df, file=SILVER_FILE):
     df.to_csv(file, index=False, encoding="utf-8")

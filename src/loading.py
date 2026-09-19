@@ -3,9 +3,9 @@ from dotenv import load_dotenv
 import os
 from database import connect_database
 
+load_dotenv()
+
 GOLD_FILE = os.getenv("GOLD_FILE")
-
-
 
 def load_gold_data(file=GOLD_FILE):
     return pd.read_csv(file)
@@ -117,7 +117,10 @@ def upsert_weather_risk(db, forecast_id, row):
 
     return db.fetchone()[0]
 
-def store_data(df, connection=connect_database()):
+def store_data(df, connection=None):
+    
+    if connection is None:
+        connection = connect_database()
 
     db = connection.cursor()
 

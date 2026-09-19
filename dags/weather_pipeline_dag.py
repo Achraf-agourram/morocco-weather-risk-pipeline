@@ -23,4 +23,4 @@ with DAG(
 
     loading_task = BashOperator(task_id="load_data", bash_command="python /opt/airflow/src/loading.py")
 
-    [extract_cities_task, extract_weather_task] >> transform_clean_task >> feature_engineering_task >> loading_task
+    extract_cities_task >> extract_weather_task >> transform_clean_task >> feature_engineering_task >> loading_task

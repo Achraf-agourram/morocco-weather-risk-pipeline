@@ -44,6 +44,9 @@ def extract_weather (cities=None, url=WEATHER_URL, file=BRONZE_WEATHER):
     response = re.get(url, params=params)
     data = response.json()
 
+    for i, city_data in enumerate(data):
+        city_data["city"] = cities.iloc[i]["city"]
+
     with open(file, "w", encoding="utf-8") as file:
         json.dump(data, file, indent=4)
 

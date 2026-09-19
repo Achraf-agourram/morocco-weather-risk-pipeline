@@ -29,6 +29,9 @@ services:
       context: .
       dockerfile: docker/airflow/Dockerfile
 
+    env_file:
+    - .env
+
     container_name: weather_airflow
 
     depends_on:
